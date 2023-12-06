@@ -1,9 +1,15 @@
 package cn.edu.tyut.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.spring6.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 /**
  * @Author 羊羊
@@ -12,13 +18,51 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * @DATE 2023/12/6
  * @Time 17:22
  * @Package_Name cn.edu.tyut.cnedutyutspringmvc_annotatiion.config
- * EnableWebMvc注解是为了快速配置SpringMvc注解，如果不添加此注解会导致后续无法通过实现WebMvcConfigurer接口进行自定义配置
+ * EnableWebMvc注解是快速配置SpringMvc注解，如果不添加此注解会导致后续无法通过实现WebMvcConfigurer接口进行自定义配置
  */
 @Configuration
 @EnableWebMvc
-@ComponentScans({
-        @ComponentScan("cn.edu.tyut.controller")
-})
-public class WebConfiguration {
+@ComponentScans({@ComponentScan("cn.edu.tyut.controller")})
+public class WebConfiguration implements WebMvcConfigurer {
+    /**
+     * 使用ThymeleafViewResolver作为视图解析器来解析我们的HTML页面
+     * 可以存在多个解析器，但是需要为他们通过setOrder(1)来设定解析顺序
+     * setCharacterEncoding("UTF-8")设置编码格式
+     * 视图解析器是通过模板引擎来进行解析的，所以这里也需要设定一下模板引擎
+     * @param springTemplateEngine 传入的模板引擎
+     * @return 返回视图解析器
+     */
+    @Bean
+    public ThymeleafViewResolver thymeleafViewResolver(SpringTemplateEngine springTemplateEngine) {
+        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+        resolver.setOrder(1);
+        resolver.setCharacterEncoding("UTF-8");
+        resolver.setTemplateEngine(springTemplateEngine);
+        return resolver;
+    }
 
+    /**
+     * 配置模板引擎中的模板解析器为提供的参数类型
+     * @param resolver 模板解析器
+     * @return 模板引擎
+     */
+    @Bean
+    public SpringTemplateEngine springTemplateEngine(ITemplateResolver resolver) {
+        SpringTemplateEngine engine = new SpringTemplateEngine();
+        engine.setTemplateResolver(resolver);
+        return engine;
+    }
+
+    /**
+     * 配置模板解析器中的资源前缀和后缀
+     * 默认资源路径在webapp目录下，如果是类路径下需要添加classpath:前缀
+     * @return 模板解析器
+     */
+    @Bean
+    public SpringResourceTemplateResolver templateResolver() {
+        SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
+        resolver.setPrefix("WEB-INF/pages/");
+        resolver.setSuffix(".html");
+        return resolver;
+    }
 }
