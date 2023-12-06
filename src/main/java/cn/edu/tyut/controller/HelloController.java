@@ -48,4 +48,9 @@ public class HelloController {
         model.addAttribute("name", "using index04");
         return "index04";
     }
+
+    @RequestMapping("/index05")
+    public String index05() {
+        return "index05";
+    }
 }

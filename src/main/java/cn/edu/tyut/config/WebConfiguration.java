@@ -1,11 +1,16 @@
 package cn.edu.tyut.config;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -64,5 +69,20 @@ public class WebConfiguration implements WebMvcConfigurer {
         resolver.setPrefix("WEB-INF/pages/");
         resolver.setSuffix(".html");
         return resolver;
+    }
+
+    /**
+     * 调用configureDefaultServletHandling方法启用默认的Servlet处理，这样可以确保静态资源能够正确处理。
+     * @param configurer 让静态资源通过Tomcat提供的默认Servlet进行解析，我们需要让配置类实现一下WebMvcConfigurer接口
+     */
+    @Override
+    public void configureDefaultServletHandling(@NotNull DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+
+    @Override
+    public void addResourceHandlers(@NotNull ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+        //配置静态资源的访问路径
     }
 }
