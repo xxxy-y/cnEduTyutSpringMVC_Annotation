@@ -23,4 +23,30 @@
    需要注意的是，Model对象的作用域是当前请求的生命周期内，即在当前请求中设置的属性只对当前请求有效，不会影响其他请求。
    所以，当处理器方法的参数中包含Model类型的参数时，并不是从请求参数中获取数据，而是用来向视图传递数据的。
 8. 当我使用`@RequestMapping`注释指定访问路径时，需要与视图解析器中的前缀和后缀连接起来是一个完整的网络地址。但是当我设置前缀为`/WEB-INF/pages/`，路径为`/index`时，会自动去除重复的一个`/`，但是如果少了一个`/`的话，它不会给你自动添加。
-9. 
+9. SpringMVC工作原理:
+
+   处理器就是Controller类, 将生成的响应结果返回给处理器适配器
+
+   处理器映射器可以将URL与处理器绑定起来,当该URL访问时,便会返回相对应的处理器
+
+   处理器适配器根据处理器对象的类型和方法签名, 将请求参数进行适配并传递给处理器进行处理
+
+   视图解析器将逻辑视图名解析为物理视图名, 即具体的页面地址
+
+   Spring MVC框架的执行流程可以概括为以下几个步骤：
+      1. 客户端发送请求：客户端通过浏览器发送一个HTTP请求到服务器。
+      2. 前端控制器(DispatcherServlet)接收请求：前端控制器（DispatcherServlet）是Spring MVC的核心组件，它作为一个中央处理器接收所有的请求，并将请求分发给适当的处理器进行处理。
+      3. 前端控制器(DispatcherServlet)将请求发送到处理器映射器进行映射：前端控制器根据URL路径找到合适的处理器映射器（Handler Mapping），处理器映射器根据配置的URL映射规则找到对应的处理器（通常是Controller类）将找到的对应的处理器的名称返回给前端控制器(DispatchServlet)。
+      4. 前端控制器(DispatcherServlet)将得到的处理器名称发送到处理器适配器, 来通过处理器适配器调用处理器：前端控制器将请求传递给处理器适配器（Handler Adapter），处理器适配器负责根据对象的类型和方法签名, 将请求参数进行适配并传递给处理器对象进行实际处理，并将处理结果(响应的数据和视图的逻辑名称)封装为ModelAndView对象, 最后将ModelAndView对象返回给前端控制器(DispatchServlet)。
+      5. 处理器适配器将请求参数进行适配并将参数传递给处理器处理请求：处理器（Controller类）根据业务逻辑处理请求，并返回一个ModelAndView对象，其中包含处理结果和需要展示的视图信息, 将ModelAndView对象返回给处理器适配器, 处理器适配器再将ModelAndView对象返回给前端控制器(DispatchServlet)。
+      6. 前端控制器将ModelAndView对象发送给视图解析器来解析视图：前端控制器将ModelAndView对象传递给视图解析器（View Resolver），视图解析器根据配置的视图解析规则找到对应的视图（通常是JSP页面或模板文件）, 最后返回视图(View)对象。
+      7. 视图渲染和响应生成：视图解析器将模型数据传递给视图进行渲染，生成最终的响应结果。渲染后的视图内容会被发送到客户端作为HTTP响应。
+      8. 响应返回给客户端：前端控制器将最终生成的响应返回给客户端，完成一次请求响应周期。
+10. DispatcherServlet 是 SpringMVC 的核心类，其全限定名为 org.springframework.web.servlet.DispatcherServlet。DispatcherServlet是SpringMVC的流程控制中心，也称为SpringMVC的前端控制器，它可以拦截客户端的请求。拦截客户端请求后，DispatcherServlet会根据具体规则将请求交给其他组件处理，所有请求都要经过DispatcherServlet进行转发处理，这样就降低了SpringMVC组件之间的耦合性。
+11. SpringMVC有三大组件：处理器映射器，处理器适配器，视图解析器。
+12. 基于请求方式的URL路径映射：@GetMapping、@PostMapping、@PutMapping、@DeleteMapping、@PatchMapping
+13. 基于Ant风格的URL路径映射：
+    1. ?：匹配如何单字符，可以看作为[anyone]。
+    2. *：匹配0或者任意数量的字符，可以看作为[any]、[oneMore]，作为目录不能为空。
+    3. **：匹配0或者多级目录，可以看作为[anyPath]。
+14. 基于RESTFul风格的URL路径映射：把请求参数变为请求路径的一种风格，将类似于`http://localhost:8080/secondMapping/a?id=1` 变为 `http://localhost:8080/secondMapping/a/id/1` 类似风格的。
