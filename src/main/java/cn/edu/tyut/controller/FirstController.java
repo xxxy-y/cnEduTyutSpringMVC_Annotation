@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class FirstController {
-    @RequestMapping("a")
+    @RequestMapping("/a")
     public void a() {
         System.out.println("success");
     }

@@ -5,12 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -40,8 +38,8 @@ public class WebConfiguration implements WebMvcConfigurer {
     @Bean
     public ThymeleafViewResolver thymeleafViewResolver(SpringTemplateEngine springTemplateEngine) {
         ThymeleafViewResolver resolver = new ThymeleafViewResolver();
-        resolver.setOrder(1);
-        resolver.setCharacterEncoding("UTF-8");
+//        resolver.setOrder(1);
+//        resolver.setCharacterEncoding("UTF-8");
         resolver.setTemplateEngine(springTemplateEngine);
         return resolver;
     }
