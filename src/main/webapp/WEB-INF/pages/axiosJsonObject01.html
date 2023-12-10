@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+<body>
+<p>传递json对象来实现登录</p>
+<button onclick="login()">立即登录</button>
+</body>
+</html>
+<script>
+    <!--加上headers: {'Content-Type': 'application/x-www-form-urlencoded'}的话，提交数据的格式是通过表单来提交的-->
+    // 不加的话,会将js对象转换为JSON字符串来进行传输
+
+    function login() {
+        axios.post('/axiosObjectTest01', {
+            username: 'test',
+            password: '123456'
+        }, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(({data}) => {
+            if (data.success) {
+                alert('登录成功')
+            } else {
+                alert('登录失败')
+            }
+        })
+    }
+</script>

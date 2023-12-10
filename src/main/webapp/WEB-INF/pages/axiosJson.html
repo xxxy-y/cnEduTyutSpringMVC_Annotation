@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+<body>
+<p>欢迎登录</p>
+<p>用户名: <span id="username"></span></p>
+<p>密码: <span id="password"></span></p>
+<button onclick="getInfo()">登录</button>
+</body>
+</html>
+<script>
+    // 需要接收到的是json类型的数据格式
+    function getInfo() {
+        axios.get('/axiosTest').then(({data}) => {
+            document.getElementById('username').innerText = data.username
+            document.getElementById('password').innerText = data.password
+        })
+    }
+</script>

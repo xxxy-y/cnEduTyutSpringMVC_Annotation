@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+</head>
+<body>
+<p>传递json对象来实现登录</p>
+<button onclick="login()">立即登录</button>
+</body>
+</html>
+<script>
+    function login() {
+        axios.post('/axiosObjectTest02', {
+            username: 'test',
+            password: '123456'
+        }).then(({data}) => {
+            if(data.success) {
+                alert('登录成功')
+            } else {
+                alert('登录失败')
+            }
+        })
+    }
+</script>
