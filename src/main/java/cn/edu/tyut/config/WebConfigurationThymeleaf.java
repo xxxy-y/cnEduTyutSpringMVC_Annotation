@@ -1,5 +1,7 @@
 package cn.edu.tyut.config;
 
+import cn.edu.tyut.interceptor.MainInterceptor;
+import cn.edu.tyut.interceptor.SecondInterceptor;
 import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Bean;
@@ -7,10 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
@@ -93,7 +92,24 @@ public class WebConfigurationThymeleaf implements WebMvcConfigurer {
     }
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+    public void configureMessageConverters(@NotNull List<HttpMessageConverter<?>> converters) {
         converters.add(new FastJsonHttpMessageConverter());
+    }
+
+    /**
+     * 拦截器的执行顺序根据order中的值来判断，越小越先执行，如果都不指定值，则根据注册顺序来判断执行顺序
+     * 在处理之前，是按照顺序从前向后进行拦截的，但是处理完成之后，就按照倒序执行处理后方法，而完成后是在所有的postHandle执行之后再同样的以倒序方式执行
+     * @param registry 拦截器的注册器
+     */
+    @Override
+    public void addInterceptors(@NotNull InterceptorRegistry registry) {
+        registry.addInterceptor(new MainInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/home")
+                .order(1);
+        registry.addInterceptor(new SecondInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/home")
+                .order(2);
     }
 }
