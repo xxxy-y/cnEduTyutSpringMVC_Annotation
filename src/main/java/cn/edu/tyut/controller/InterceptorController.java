@@ -16,9 +16,9 @@ public class InterceptorController {
     @RequestMapping("/interceptor")
     public String interceptorController() {
         System.out.println("处理中...");
-        if(true) {
-            throw new RuntimeException("");
-        }
+//        if(true) {
+//            throw new RuntimeException("");
+//        }
         return "error";
     }
 }

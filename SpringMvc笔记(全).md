@@ -114,3 +114,11 @@
 	4. 简化开发流程：使用@RestController注解可以简化开发流程，减少代码的编写和配置的工作量。通过简单的注解配置，就可以将一个普通的Java类转变为一个处理RESTful请求的控制器，大大提高了开发效率。
 
 19. SpringMVC的拦截器：处理前和处理后，包含了真正的请求映射的处理，在整个流程结束后还执行了一次`afterCompletion`方法，如果`preHandle`方法返回的是true，则执行下面的方法，如果是false方法，则之后的流程全部取消。如果在处理中发生异常，不会执行处理后`postHandle`方法，但是会执行`afterCompletion`方法，我们可以在`afterCompletion`方法中获取到抛出的异常。多级拦截器：在处理之前，是按照顺序从前向后进行拦截的，但是处理完成之后，就按照倒序执行处理后方法，而完成后是在所有的`postHandle`执行之后再同样的以倒序方式执行。与单个拦截器的情况一样，一旦拦截器返回false，那么之后无论有无拦截器，都不再继续。
+
+20. 我们在一开始说了SpringMVC有两个容器，一个是Web容器一个是根容器。Web容器只负责Controller等表现层内容根容器就是Spring容器，它负责Service、Dao等，并且它是Web容器的父容器。根容器就是Spring容器，它负责Service、Dao等，并且它是Web容器的父容器。
+
+	![](6ZAyRrDw2QMU8Xv.png)
+
+21. HandlerMapping保存了所有的请求映射信息（Controller中定义的），它可以根据请求找到处理器Handler，但并不是简单的返回处理器，而是将处理器和拦截器封装，形成一个处理器执行链（类似于之前的Filter）
+
+22. 在容器中查找所有的HandlerAdapter，它用于处理请求并返回ModelAndView对象，默认有三种实现HttpRequestHandlerAdapter，SimpleControllerHandlerAdapter和AnnotationMethodHandlerAdapter。当HandlerMapping找到处理请求的Controller之后，会选择一个合适的HandlerAdapter处理请求，比如我们之前使用的是注解方式配置Controller，现在有一个请求携带了一个参数，那么HandlerAdapter会对请求的数据进行解析，并传入方法作为实参，最后根据方法的返回值将其封装为ModelAndView对象
