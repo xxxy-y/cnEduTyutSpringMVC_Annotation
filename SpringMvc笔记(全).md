@@ -122,3 +122,9 @@
 21. HandlerMapping保存了所有的请求映射信息（Controller中定义的），它可以根据请求找到处理器Handler，但并不是简单的返回处理器，而是将处理器和拦截器封装，形成一个处理器执行链（类似于之前的Filter）
 
 22. 在容器中查找所有的HandlerAdapter，它用于处理请求并返回ModelAndView对象，默认有三种实现HttpRequestHandlerAdapter，SimpleControllerHandlerAdapter和AnnotationMethodHandlerAdapter。当HandlerMapping找到处理请求的Controller之后，会选择一个合适的HandlerAdapter处理请求，比如我们之前使用的是注解方式配置Controller，现在有一个请求携带了一个参数，那么HandlerAdapter会对请求的数据进行解析，并传入方法作为实参，最后根据方法的返回值将其封装为ModelAndView对象
+
+23. 如果提供了自定义的异常处理器，那么异常都会传入到自定义的异常处理器中进行处理，而不会进行在xml文件中定义的映射关系来处理。因为自定义异常处理器也会注册到SpringMVC中，来将在xml文件中定义的异常处理器进行覆盖。
+
+24. 当使用@ControllerAdvice注解和@ExceptionHandler注解后，使用继承方式实现的自定义异常处理器也就失效了。
+
+25. 
